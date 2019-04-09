@@ -2,6 +2,10 @@
 close all
 clc
 
+% Add utilities folder to the path
+addpath('utilities/');
+
+% Passenger car - geometric parameters
 g  = 9.81;
 m  = 1500;
 a1 = 1.5;
@@ -22,8 +26,8 @@ roadx = [-1, 5]; roady = [0, 0];
 
 % Create bodies for animation
 car = carBody();
-[xwhlF, ywhlF] = create_circle([0.85 car.tire.r0], car.tire.r0);
-[xwhlR, ywhlR] = create_circle([0.85+car.shape.wb car.tire.r0], car.tire.r0);
+[xwhlF, ywhlF] = uty_createcircle([0.85 car.tire.r0], car.tire.r0);
+[xwhlR, ywhlR] = uty_createcircle([0.85+car.shape.wb car.tire.r0], car.tire.r0);
 
 plot([-1 5], [0 0], '--k'), hold on
 scatter(0, 0, 80)
@@ -70,15 +74,15 @@ n = length(alp);
 
 for i=1:n
 
-    % Define matrix of rotation
+    % Define and calculate transformation matrix
     alpi = alp(i);
     R = [cos(alpi), -sin(alpi);
          sin(alpi),  cos(alpi)];
     
-    pRoad = rotates(R, [roadx', roady']);
-    pCar  = rotates(R, [car.shape.x, car.shape.y]);
-    pWhlF = rotates(R, [xwhlF', ywhlF']);
-    pWhlR = rotates(R, [xwhlR', ywhlR']);
+    pRoad = uty_rotate2D(R, [roadx', roady']);
+    pCar  = uty_rotate2D(R, [car.shape.x, car.shape.y]);
+    pWhlF = uty_rotate2D(R, [xwhlF', ywhlF']);
+    pWhlR = uty_rotate2D(R, [xwhlR', ywhlR']);
     
     % Update bodies
     set(hroad, 'XData', pRoad(:, 1), 'YData', pRoad(:,2));
